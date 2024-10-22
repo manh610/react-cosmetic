@@ -1,0 +1,16 @@
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    height: 64px;
+    background-color: #FD95AB;
+}
+
+.content {
+    padding-right: 20px;
+    color: white;
+}
+
+.noti{
+    margin-right: 20px;
+}
