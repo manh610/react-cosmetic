@@ -9,6 +9,10 @@ import UserManagement from './user-management/admin_user';
 
 import { Col, Row } from 'antd';
 import CreateUser from './user-management/create_user';
+import BrandManagement from './product-management/admin_brand';
+import BrandItem from './product-management/admin_brand_item';
+import CategoryManagement from './product-management/admin_category';
+import CategoryItem from './product-management/admin_category_item';
 
 export default function Admin(){
 
@@ -27,8 +31,14 @@ export default function Admin(){
                     <Routes>
                         <Route path="/" element={<AdminDashboard/>}></Route>
                         <Route path="/user" element={<UserManagement/>}></Route>
-                        <Route path='/user/:id/add' element={<CreateUser/>}></Route>
+                        <Route path='/user/0/add' element={<CreateUser/>}></Route>
                         <Route path='/user/:id/edit' element={<CreateUser/>}></Route>
+                        <Route path='/brand' element={<BrandManagement/>}></Route>
+                        <Route path='/brand/0/add' element={<BrandItem/>}></Route>
+                        <Route path='/brand/:id/edit' element={<BrandItem/>}></Route>
+                        <Route path='/category' element={<CategoryManagement/>}></Route>
+                        <Route path='/category/0/add' element={<CategoryItem/>}></Route>
+                        <Route path='/category/:id/edit' element={<CategoryItem/>}></Route>
                     </Routes>
                 </Col>
             </Row>

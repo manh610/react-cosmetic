@@ -16,3 +16,25 @@
     font-weight: bold;
     margin-bottom: 20px;
 }
+
+.btn-admin-add{
+    margin-right: 10px;
+}
+
+.admin-btn-container{
+    margin-top: 30px;
+    margin-right: 100px;
+    justify-content: center;
+}
+
+.require-icon{
+    color: red
+}
+
+.ant-upload-wrapper{
+    margin-top: 15px !important;
+}
+
+.mg-t-15 {
+    margin-top: 15px;
+}

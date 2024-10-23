@@ -233,7 +233,7 @@ const CreateUser = () => {
                     />
                 </Col>
             </Row>
-            <Row className='admin-user-btn-container'>
+            <Row className='admin-btn-container'>
                 <Button onClick={back} className='btn-back' size='large' icon={<ArrowLeftOutlined />}>Quay lại</Button>
                 <Button onClick={onSubmit} type='primary' size='large' icon={<CheckOutlined />}>Lưu</Button>
             </Row>
