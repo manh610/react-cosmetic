@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_URL = `${process.env.REACT_APP_BASE_URL}${process.env.REACT_APP_BASE_PATH}/brand`;
+import { config } from '../config/config';
+
+const API_URL = `${config.REACT_APP_BASE_URL}/brand`
 
 const BrandService = {
   //#region CRUD
@@ -21,7 +23,7 @@ const BrandService = {
 
   create: async (data) => {
     try {
-      const response = await axios.post(API_URL, JSON.parse(data), {
+      const response = await axios.post(API_URL, data, {
         headers: { 'Content-Type': 'application/json' },
       });
       return response.data;
@@ -33,7 +35,7 @@ const BrandService = {
 
   update: async (id, data) => {
     try {
-      const response = await axios.put(`${API_URL}/${id}`, JSON.stringify(data), {
+      const response = await axios.put(`${API_URL}/${id}`, data, {
         headers: { 'Content-Type': 'application/json' },
       });
       return response.data;

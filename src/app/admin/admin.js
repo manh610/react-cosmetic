@@ -31,14 +31,11 @@ export default function Admin(){
                     <Routes>
                         <Route path="/" element={<AdminDashboard/>}></Route>
                         <Route path="/user" element={<UserManagement/>}></Route>
-                        <Route path='/user/0/add' element={<CreateUser/>}></Route>
-                        <Route path='/user/:id/edit' element={<CreateUser/>}></Route>
+                        <Route path='/user/:id/:type' element={<CreateUser/>}></Route>
                         <Route path='/brand' element={<BrandManagement/>}></Route>
-                        <Route path='/brand/0/add' element={<BrandItem/>}></Route>
-                        <Route path='/brand/:id/edit' element={<BrandItem/>}></Route>
+                        <Route path='/brand/:id/:type' element={<BrandItem/>}></Route>
                         <Route path='/category' element={<CategoryManagement/>}></Route>
-                        <Route path='/category/0/add' element={<CategoryItem/>}></Route>
-                        <Route path='/category/:id/edit' element={<CategoryItem/>}></Route>
+                        <Route path='/category/:id/:type' element={<CategoryItem/>}></Route>
                     </Routes>
                 </Col>
             </Row>

@@ -1,11 +1,15 @@
-import { Button, Table, Row } from 'antd';
+import { Button, Table, Row, Tooltip } from 'antd';
 import React, {useState, useEffect} from 'react';
 import { createStyles } from 'antd-style';
 
-import { PlusOutlined, ReloadOutlined } from '@ant-design/icons'
+import { PlusOutlined, ReloadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 
 import './admin_product.css';
 import { useNavigate } from 'react-router-dom';
+
+import brandService from '../../service/brand.service';
+
+import { toast, ToastContainer } from 'react-toastify';
 
 export default function BrandManagement()
 {
@@ -59,33 +63,54 @@ export default function BrandManagement()
         },
     ]
 
-    const dataInit = [
-        {
-            'stt': 1,
-            'code': "Manh Do",
-        },
-        {
-            'stt': 1,
-            'code': "Manh Do",
-        },
-        {
-            'stt': 1,
-            'code': "Manh Do",
-        },
-        {
-            'stt': 1,
-            'code': "Manh Do",
-        },
-        {
-            'stt': 1,
-            'code': "Manh Do",
-        },
-    ]
+    const [data, setData] = useState([]);
 
-    const [data, setData] = useState(dataInit)
+    const onClickEdit = (item) => {
+        console.log(item);
+        navigate(`/admin/brand/${item.id}/edit`);
+    }
+
+    const processData = (data) => {
+        var temp = JSON.parse(JSON.stringify(data));
+        var count = 1;
+        for ( var i = 0; i < temp.length; i++ ){
+            temp[i]['stt'] = count++;
+            // temp[i]['fullName'] = temp[i].givenName + ' ' + temp[i].familyName;
+            temp[i].edit = <Tooltip title='Sửa'><EditOutlined onClick={onClickEdit.bind(null, temp[i])} /></Tooltip>
+            temp[i].delete = <Tooltip title='Xóa'><DeleteOutlined /></Tooltip>
+        }
+        setData(temp);
+    }
+
+    useEffect(()=>{
+        searchBrand();
+    }, [])
+
+    const searchBrand = async () => {
+        try {
+            const response = await brandService.search({});
+            if (response.status) {
+                processData(response.data);
+            }
+        } catch (error) {
+            toast.error('Có lỗi xảy ra');
+            console.log(error);
+        }
+    }
 
     return (
         <div className=''>
+            <ToastContainer 
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
             <div className='admin-title'>
                 QUẢN LÝ THƯƠNG HIỆU SẢN PHẨM 
             </div>

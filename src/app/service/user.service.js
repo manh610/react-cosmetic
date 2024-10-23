@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const BASE_URL = process.env.REACT_APP_BASE_URL + process.env.REACT_APP_BASE_PATH;
+import { config } from '../config/config';
+
+const BASE_URL = config.REACT_APP_BASE_URL;
 
 class UserService {
 

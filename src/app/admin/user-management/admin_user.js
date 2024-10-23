@@ -1,11 +1,15 @@
-import { Button, Table, Row } from 'antd';
+import { Button, Table, Row, Tooltip } from 'antd';
 import React, {useState, useEffect} from 'react';
 import { createStyles } from 'antd-style';
 
-import { PlusOutlined, ReloadOutlined } from '@ant-design/icons'
+import { PlusOutlined, ReloadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 
 import './admin_user.css';
 import { useNavigate } from 'react-router-dom';
+
+import userService from '../../service/user.service';
+
+import { toast, ToastContainer } from 'react-toastify';
 
 export default function UserManagement()
 {
@@ -43,57 +47,83 @@ export default function UserManagement()
         },
         {
             title: 'Họ và tên',
-            dataIndex: 'imageUrl',
+            dataIndex: 'fullName',
         },
         {
             title: 'Cấp bậc',
-            dataIndex: 'cost',
+            dataIndex: 'userRank',
         },
         {
             title: 'Email',
-            dataIndex: 'price',
+            dataIndex: 'email',
         },
         {
             title: 'Số điện thọai',
-            dataIndex: 'quantity',
+            dataIndex: 'phone',
         },
         {
             title: 'Trạng thái',
-            dataIndex: 'delete',
+            dataIndex: 'status',
         },
         {
             title: '',
             dataIndex: 'edit',
         },
+        {
+            title: '',
+            dataIndex: 'delete',
+        },
     ]
 
-    const dataInit = [
-        {
-            'stt': 1,
-            'username': "Manh Do",
-        },
-        {
-            'stt': 1,
-            'username': "Manh Do",
-        },
-        {
-            'stt': 1,
-            'username': "Manh Do",
-        },
-        {
-            'stt': 1,
-            'username': "Manh Do",
-        },
-        {
-            'stt': 1,
-            'username': "Manh Do",
+    const [data, setData] = useState([]);
+
+    const onClickEdit = (item) => {
+        console.log(item);
+        navigate(`/admin/user/${item.id}/edit`);
+    }
+
+    const processData = (data) => {
+        var temp = JSON.parse(JSON.stringify(data));
+        var count = 1;
+        for ( var i = 0; i < temp.length; i++ ){
+            temp[i]['stt'] = count++;
+            temp[i]['fullName'] = temp[i].givenName + ' ' + temp[i].familyName;
+            temp[i].edit = <Tooltip title='Sửa'><EditOutlined onClick={onClickEdit.bind(null, temp[i])} /></Tooltip>
+            temp[i].delete = <Tooltip title='Xóa'><DeleteOutlined /></Tooltip>
         }
-    ]
+        setData(temp);
+    }
 
-    const [data, setData] = useState(dataInit)
+    useEffect(()=>{
+        searchUser();
+    }, [])
+
+    const searchUser = async () => {
+        try {
+            const response = await userService.search({});
+            if (response.status) {
+                processData(response.data);
+            }
+        } catch (error) {
+            toast.error('Có lỗi xảy ra');
+        }
+    }
+
+    
 
     return (
         <div className=''>
+            <ToastContainer 
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
             <div className='admin-title'>
                 QUẢN LÝ NGƯỜI DÙNG
             </div>

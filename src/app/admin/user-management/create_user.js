@@ -11,85 +11,55 @@ import { Button, Input, Row, Col, Select, DatePicker } from 'antd';
 import { ArrowLeftOutlined, CheckOutlined } from '@ant-design/icons'
 
 const CreateUser = () => {
-    // toast.configure()
     const { id, type } = useParams();
     const navigate = useNavigate();
     const [isEdit, setIsEdit] = useState(true);
-    const [submitted, setSubmitted] = useState(false);
     const [user, setUser] = useState(null);
-    const [countries] = useState([
-        { code: 'ad', name: 'Việt Nam' },
-        { code: 'am', name: 'Anh' }
-    ]);
 
-    // useEffect(() => {
-    //     createForm();
-    //     checkForm();
-    //     // initProvinces();
-    // }, []);
+    const [username, setUserName] = useState('');
+    const [password, setPass] = useState('');
+    const [confirmPassword, setConfirm] = useState('');
+    const [familyName, setFname] = useState('');
+    const [givenName, setGname] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [country, setCountry] = useState('');
+    const [userRank, setUserRank] = useState('');
+    const [dob, setDOB] = useState('');
+    const [identifier, setIdentifier] = useState('');
+    const [gender, setGender] = useState('');
 
-    const submit = () => {
-        console.log(user);
+    useEffect(() => {
+        initUser();
+    }, []);
+
+    const processData = (data) => {
+        setUserName(data.username);
+        setPass(data.password);
+        setDOB(data.dob);
+        setFname(data.familyName);
+        setGname(data.givenName);
+        setIdentifier(data.citizenNumber);
+        setGender(data.gender);
+        setCountry(data.country);
+        setEmail(data.email);
+        setPhone(data.phone);
+        setUserRank(data.userRank);
     }
 
-    // const createForm = () => {
-    //     reset({
-    //         username: '',
-    //         password: '',
-    //         email: '',
-    //         phone: '',
-    //         citizenNumber: '',
-    //         givenName: '',
-    //         familyName: '',
-    //         gender: '',
-    //         dob: new Date(),
-    //         country: '',
-    //         roleId: '',
-    //         status: '',
-    //         userRank: '',
-    //         avatar: null,
-    //         is2FA: false,
-    //         description: '',
-    //         confirmPassword: ''
-    //     });
-    // };
-
-
-    // const initUser = async () => {
-    //     try {
-    //     const response = await userService.getById(id);
-    //     if (response.status) {
-    //         setUser(response.data);
-    //         reset(transformData(response.data));
-    //     }
-    //     } catch (error) {
-    //         toast.error('Có lỗi xảy ra');
-    //     }
-    // };
-
-    // const initProvinces = async () => {
-    //     try {
-    //     const request = { name: '' };
-    //     const response = await addressService.getProvinces(request);
-    //     if (response.status) {
-    //         setProvinces(response.data);
-    //     }
-    //     } catch (error) {
-    //     console.error(error);
-    //     }
-    // };
-
-    // const initDistricts = async (provinceId) => {
-    //     try {
-    //     const request = { provinceId };
-    //     const response = await addressService.getDistricts(request);
-    //     if (response.status) {
-    //         setDistricts(response.data);
-    //     }
-    //     } catch (error) {
-    //     console.error(error);
-    //     }
-    // };
+    const initUser = async () => {
+        if (type == 'add') 
+            return;
+        try {
+            const response = await userService.getById(id);
+            if (response.status) {
+                setUser(response.data);
+                processData(response.data);
+            }
+        } catch (error) {
+            toast.error('Có lỗi xảy ra');
+        }
+    };
 
     const save = async (data) => {
         try {
@@ -97,7 +67,7 @@ const CreateUser = () => {
                 const response = await userService.create(data);
                 if (response.status) {
                     toast.success(`Thêm mới người dùng ${response.data.username} thành công`);
-                navigate('/admin/user');
+                    navigate('/admin/user');
                 } else {
                     toast.error('Thêm mới người dùng thất bại', 'FAIL');
                 }
@@ -105,7 +75,7 @@ const CreateUser = () => {
                 const response = await userService.update(data);
                 if (response.status) {
                     toast.success(`Cập nhật người dùng ${response.data.username} thành công`);
-                navigate('/admin/user');
+                    navigate('/admin/user');
                 } else {
                     toast.error('Cập nhật người dùng thất bại');
                 }
@@ -114,25 +84,6 @@ const CreateUser = () => {
             toast.error('Có lỗi xảy ra');
         }
     };
-
-    const transformData = (data) => ({
-        id: user.id,
-        username: user.username,
-        password: '123456aA@',
-        confirmPassword: user.password,
-        email: data.email,
-        phone: data.phone,
-        givenName: data.givenName,
-        familyName: data.familyName,
-        citizenNumber: data.citizenNumber,
-        gender: data.gender,
-        dob: data.dob,
-        country: data.country,
-        userRank: data.userRank,
-        avatar: data.avatar,
-        roleId: user.roleId,
-        status: 'ACTIVE'
-    });
 
     const onSubmit = (data) => {
         if (data) {
@@ -158,18 +109,18 @@ const CreateUser = () => {
                 pauseOnHover
             />
             <div className='admin-title'>
-                THÊM MỚI NGƯỜI DÙNG
+                {type == 'add' ? 'THÊM MỚI NGƯỜI DÙNG' : 'CẬP NHẬT NGƯỜI DÙNG' }
             </div>
             <Row className='user-account'>
                 <Col span={10}>
                     <p className='field-label'>Tên đăng nhập <span className='require-icon'>*</span></p>
-                    <Input placeholder='Nhập tên đăng nhập'></Input>
+                    <Input value={username} placeholder='Nhập tên đăng nhập'></Input>
 
                     <p className='field-label'>Mật khẩu <span className='require-icon'>*</span></p>
-                    <Input placeholder='Nhập mật khẩu'></Input>
+                    <Input value={password} placeholder='Nhập mật khẩu'></Input>
 
                     <p className='field-label'>Chức vụ <span className='require-icon'>*</span></p>
-                    <Input placeholder='Nhập tên đăng nhập'></Input>
+                    <Input placeholder='Nhập tên chức vụ'></Input>
                 </Col>
                 <Col span={2}></Col>
                 <Col span={10}>
@@ -180,37 +131,38 @@ const CreateUser = () => {
                             { value: 'MEMBER', 'label': 'Thành viên'},
                             { value: 'PRIORITY', 'label': 'Ưu tiên'}
                         ]}
-                        value={'MEMBER'}
+                        value={userRank}
                     />
 
                     <p className='field-label'>Nhập lại mật khẩu <span className='require-icon'>*</span></p>
-                    <Input placeholder="Nhập lại mật khẩu"></Input>
+                    <Input value={confirmPassword} placeholder="Nhập lại mật khẩu"></Input>
                 </Col>
             </Row>
             <hr/>
             <Row className='user-info'>
             <Col span={10}>
                     <p className='field-label'>Họ <span className='require-icon'>*</span></p>
-                    <Input placeholder="Nhập họ"></Input>
+                    <Input value={familyName} placeholder="Nhập họ"></Input>
 
                     <p className='field-label'>Email <span className='require-icon'>*</span></p>
-                    <Input placeholder='Nhập email'></Input>
+                    <Input value={email} placeholder='Nhập email'></Input>
 
                     <p className='field-label'>Số CMND/CCCD <span className='require-icon'>*</span></p>
-                    <Input placeholder='Nhập số CMND/CCCD'></Input>
+                    <Input value={identifier} placeholder='Nhập số CMND/CCCD'></Input>
 
                     <p className='field-label'>Ngày sinh <span className='require-icon'>*</span></p>
                     <DatePicker 
                         style={{ width: '100%' }}
+                        value={dob}
                     />
                 </Col>
                 <Col span={2}></Col>
                 <Col span={10}>
                     <p className='field-label'>Tên <span className='require-icon'>*</span></p>
-                    <Input placeholder='Nhập tên'></Input>
+                    <Input value={givenName} placeholder='Nhập tên'></Input>
 
                     <p className='field-label'>Số điện thoại <span className='require-icon'>*</span></p>
-                    <Input placeholder="Nhập số điện thoại"></Input>
+                    <Input value={phone} placeholder="Nhập số điện thoại"></Input>
 
                     <p className='field-label'>Giới tính <span className='require-icon'>*</span></p>
                     <Select
@@ -219,17 +171,17 @@ const CreateUser = () => {
                             { value: 'MALE', 'label': 'Nam'},
                             { value: 'FEMALE', 'label': 'Nữ'}
                         ]}
-                        value={'MALE'}
+                        value={gender}
                     />
 
-                    <p className='field-label'>Cấp bậc <span className='require-icon'>*</span></p>
+                    <p className='field-label'>Quốc gia <span className='require-icon'>*</span></p>
                     <Select
                         style={{ width: '100%' }}
                         options={[
                             { value: 'VN', 'label': 'VietNam'},
                             { value: 'EN', 'label': 'England'}
                         ]}
-                        value={'VN'}
+                        value={country}
                     />
                 </Col>
             </Row>
