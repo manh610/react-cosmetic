@@ -17,9 +17,6 @@ const BrandItem = () => {
     // toast.configure()
     const { id, type } = useParams();
     const navigate = useNavigate();
-    const [isEdit, setIsEdit] = useState(true);
-    const [submitted, setSubmitted] = useState(false);
-
 
     const [code, setCode] = useState('');
     const [name, setName] = useState('');
@@ -27,6 +24,7 @@ const BrandItem = () => {
     const [country, setCountry] = useState('');
     const [mall, setMall] = useState(false);
     const [description, setDes] = useState('');
+    const [image, setImage] = useState('');
 
     const processData = (data) => {
         setCode(data.code);
@@ -35,6 +33,15 @@ const BrandItem = () => {
         setCountry(data.country);
         setMall(data.mall);
         setDes(data.description);
+        setImage(data.logo);
+        if (data.logo != '' && data.logo != null) {
+            setFileList([{
+                uid: '-1',
+                name: 'image.png',
+                status: 'done',
+                url: 'data:image/jpeg;base64,'+data.logo
+            }])
+        }
     }
 
     const initBrand = async () => {
@@ -61,15 +68,21 @@ const BrandItem = () => {
                 const response = await brandService.create(data);
                 if (response.status) {
                     toast.success(`Thêm mới thương hiệu ${response.data.name} thành công`);
-                    navigate('/admin/brand');
+                    setTimeout(() => {
+                        navigate('/admin/brand');
+                    }, 1000)
                 } else {
                     toast.error('Thêm mới thương hiệu thất bại', 'FAIL');
                 }
             } else {
                 const response = await brandService.update(id, data);
+                console.log(response);
                 if (response.status) {
+                    console.log(response.data.name);
                     toast.success(`Cập nhật thương hiệu ${response.data.name} thành công`);
-                    navigate('/admin/brand');
+                    setTimeout(() => {
+                        navigate('/admin/brand');
+                    }, 1000)
                 } else {
                     toast.error('Cập nhật thương hiệu thất bại');
                 }
@@ -87,7 +100,7 @@ const BrandItem = () => {
         var data = {
             code: code,
             name: name,
-            logo: null,
+            logo: image,
             country: country,
             mall: mall,
             slogan: slogan,
@@ -118,6 +131,18 @@ const BrandItem = () => {
         image.src = src;
         const imgWindow = window.open(src);
         imgWindow?.document.write(image.outerHTML);
+    };
+
+    const customRequest = ({ file, onSuccess }) => {
+        setTimeout(() => {
+            onSuccess('ok');
+          }, 1000);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const [, base64Image] = e.target.result.split(',');
+          setImage(base64Image);
+        };
+        reader.readAsDataURL(file);
     };
 
     return (
@@ -159,7 +184,7 @@ const BrandItem = () => {
 
                     <ImgCrop rotationSlider className='upload-img'>
                         <Upload
-                            action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+                            customRequest={customRequest}
                             listType="picture-card"
                             fileList={fileList}
                             onChange={onChange}

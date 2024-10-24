@@ -51,9 +51,9 @@ const ProductItem = () => {
     };
 
     
-    // useEffect(() => {
-    //     initProduct();
-    // }, []);
+    useEffect(() => {
+        initProduct();
+    }, []);
 
     const save = async (data) => {
         try {

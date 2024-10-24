@@ -23,7 +23,7 @@ const CategoryService = {
 
   create: async (data) => {
     try {
-      const response = await axios.post(API_URL, JSON.parse(data), {
+      const response = await axios.post(API_URL, data, {
         headers: { 'Content-Type': 'application/json' },
       });
       return response.data;
@@ -35,7 +35,7 @@ const CategoryService = {
 
   update: async (id, data) => {
     try {
-      const response = await axios.put(`${API_URL}/${id}`, JSON.stringify(data), {
+      const response = await axios.put(`${API_URL}/${id}`, data, {
         headers: { 'Content-Type': 'application/json' },
       });
       return response.data;

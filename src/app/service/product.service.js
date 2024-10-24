@@ -12,27 +12,53 @@ const httpOptions = {
 
 const ProductService = {
   // Search products
-  search: (data) => {
+  search: async (data) => {
     const params = new URLSearchParams();
-    Object.keys(data).forEach(key => {
+    Object.keys(data).forEach((key) => {
       params.append(key, data[key]);
     });
-    return axios.get(`${baseURL}`, { ...httpOptions, params });
+
+    try {
+      const response = await axios.get(baseURL, { params });
+      return response.data;
+    } catch (error) {
+      console.error('Error searching categories:', error);
+      throw error;
+    }
   },
 
-  // Create a product
-  create: (data) => {
-    return axios.post(`${baseURL}`, data, httpOptions);
+  create: async (data) => {
+    try {
+      const response = await axios.post(baseURL, data, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error creating category:', error);
+      throw error;
+    }
   },
 
-  // Update a product
-  update: (id, data) => {
-    return axios.put(`${baseURL}/${id}`, data, httpOptions);
+  update: async (id, data) => {
+    try {
+      const response = await axios.put(`${baseURL}/${id}`, data, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error updating category:', error);
+      throw error;
+    }
   },
 
-  // Get product by ID
-  getById: (id) => {
-    return axios.get(`${baseURL}/${id}`, httpOptions);
+  getById: async (id) => {
+    try {
+      const response = await axios.get(`${baseURL}/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error getting category by ID:', error);
+      throw error;
+    }
   },
 
   // Delete a product by ID

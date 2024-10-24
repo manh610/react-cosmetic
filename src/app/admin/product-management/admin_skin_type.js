@@ -74,18 +74,17 @@ export default function SkinTypeManagement()
     }
 
     useEffect(()=>{
-        // searchSkinType();
+        searchSkinType();
     }, [])
 
     const searchSkinType = async () => {
         try {
-            const response = await skinTypeService.search({});
+            const response = await skinTypeService.search();
             if (response.status) {
                 processData(response.data);
             }
         } catch (error) {
             toast.error('Có lỗi xảy ra');
-            console.log(error);
         }
     }
 
@@ -107,7 +106,6 @@ export default function SkinTypeManagement()
             </div>
             <Row className='mg-bt-15'>
                 <Button onClick={() => navigate("/admin/skin-type/0/add")} className='btn-admin-add' type='primary' icon={<PlusOutlined />}>Thêm mới</Button>
-                <Button icon={<ReloadOutlined />}>Tải lại</Button>
             </Row>
             <Table 
                 className={styles.customTable}

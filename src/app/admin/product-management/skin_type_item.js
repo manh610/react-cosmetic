@@ -21,19 +21,11 @@ const SkinTypeItem = () => {
     const [submitted, setSubmitted] = useState(false);
 
 
-    const [code, setCode] = useState('');
     const [name, setName] = useState('');
-    const [slogan, setSlogan] = useState('');
-    const [country, setCountry] = useState('');
-    const [mall, setMall] = useState(false);
     const [description, setDes] = useState('');
 
     const processData = (data) => {
-        setCode(data.code);
         setName(data.name);
-        setSlogan(data.slogan);
-        setCountry(data.country);
-        setMall(data.mall);
         setDes(data.description);
     }
 
@@ -51,9 +43,9 @@ const SkinTypeItem = () => {
     };
 
     
-    // useEffect(() => {
-    //     initSkinType();
-    // }, []);
+    useEffect(() => {
+        initSkinType();
+    }, []);
 
     const save = async (data) => {
         try {
@@ -61,7 +53,9 @@ const SkinTypeItem = () => {
                 const response = await skinTypeService.create(data);
                 if (response.status) {
                     toast.success(`Thêm mới loại da ${response.data.name} thành công`);
-                    navigate('/admin/skin-type');
+                    setTimeout(() => {
+                        navigate('/admin/skin-type');
+                    }, 1500)
                 } else {
                     toast.error('Thêm mới loại da thất bại', 'FAIL');
                 }
@@ -69,7 +63,9 @@ const SkinTypeItem = () => {
                 const response = await skinTypeService.update(id, data);
                 if (response.status) {
                     toast.success(`Cập nhật loại da ${response.data.name} thành công`);
-                    navigate('/admin/skin-type');
+                    setTimeout(() => {
+                        navigate('/admin/skin-type');
+                    }, 1500)
                 } else {
                     toast.error('Cập nhật loại da thất bại');
                 }
@@ -81,39 +77,14 @@ const SkinTypeItem = () => {
 
     const onSubmit = () => {
         var data = {
-            code: code,
             name: name,
-            logo: null,
-            country: country,
-            mall: mall,
-            slogan: slogan,
-            description: description,
-            status: 'ACTIVE'
+            description: description
         }
         save(data);
     };
 
     const back = () => {
         navigate("/admin/skin-type")
-    };
-
-    const [fileList, setFileList] = useState([]);
-    const onChange = ({ fileList: newFileList }) => {
-        setFileList(newFileList);
-    };
-    const onPreview = async (file) => {
-        let src = file.url;
-        if (!src) {
-        src = await new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file.originFileObj);
-            reader.onload = () => resolve(reader.result);
-        });
-        }
-        const image = new Image();
-        image.src = src;
-        const imgWindow = window.open(src);
-        imgWindow?.document.write(image.outerHTML);
     };
 
     return (
@@ -135,10 +106,10 @@ const SkinTypeItem = () => {
             
             <Row>
                 <p className='field-label'>Tên <span className='require-icon'>*</span></p>
-                <Input placeholder='Nhập tên'></Input>
+                <Input value={name} onChange={(e) => setName(e.target.value)} placeholder='Nhập tên'></Input>
 
                 <p className='field-label'>Mô tả</p>
-                <TextArea rows={3} placeholder='...'></TextArea>
+                <TextArea value={description} onChange={(e) => setDes(e.target.value)} rows={3} placeholder='...'></TextArea>
             </Row>
             
             <Row className='admin-btn-container'>

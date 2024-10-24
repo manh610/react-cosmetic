@@ -83,7 +83,6 @@ export default function ProductManagement()
         var count = 1;
         for ( var i = 0; i < temp.length; i++ ){
             temp[i]['stt'] = count++;
-            // temp[i]['fullName'] = temp[i].givenName + ' ' + temp[i].familyName;
             temp[i].status = temp[i].status == 'STOCK' ? 'Còn hàng':'Hết hàng';
             temp[i].edit = <Tooltip title='Sửa'><EditOutlined onClick={onClickEdit.bind(null, temp[i])} /></Tooltip>
             temp[i].delete = <Tooltip title='Xóa'><DeleteOutlined /></Tooltip>
@@ -92,7 +91,7 @@ export default function ProductManagement()
     }
 
     useEffect(()=>{
-        // searchProduct();
+        searchProduct();
     }, [])
 
     const searchProduct = async () => {

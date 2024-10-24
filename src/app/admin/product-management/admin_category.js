@@ -52,11 +52,11 @@ export default function CategoryManagement()
         },
         {
             title: 'Cấp bậc',
-            dataIndex: 'country',
+            dataIndex: 'offset',
         },
         {
             title: 'Đường dẫn',
-            dataIndex: 'slogan',
+            dataIndex: 'path',
         },
         {
             title: '',
@@ -84,7 +84,7 @@ export default function CategoryManagement()
     }
 
     useEffect(()=>{
-        // searchCategory();
+        searchCategory();
     }, [])
 
     const searchCategory = async () => {

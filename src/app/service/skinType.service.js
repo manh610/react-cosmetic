@@ -12,30 +12,70 @@ const httpOptions = {
 
 const SkinTypeService = {
   // Search skin types
-  search: () => {
-    return axios.get(`${baseURL}`, httpOptions);
+  search:  async () => {
+    try {
+      const response = await axios.get(baseURL, httpOptions );
+      return response.data;
+    } catch (error) {
+      console.error('Error searching brands:', error);
+      throw error;
+    }
   },
 
-  // Create a new skin type
-  create: (data) => {
-    const jsonData = JSON.parse(data);
-    return axios.post(`${baseURL}`, jsonData, httpOptions);
+
+  create: async (data) => {
+    try {
+      const response = await axios.post(baseURL, data, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error creating brand:', error);
+      throw error;
+    }
   },
 
-  // Update an existing skin type by ID
-  update: (id, data) => {
-    const jsonData = JSON.stringify(data);
-    return axios.put(`${baseURL}/${id}`, jsonData, httpOptions);
+  update: async (id, data) => {
+    try {
+      const response = await axios.put(`${baseURL}/${id}`, data, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error updating brand:', error);
+      throw error;
+    }
   },
 
-  // Get a skin type by ID
-  getById: (id) => {
-    return axios.get(`${baseURL}/${id}`, httpOptions);
+  getById: async (id) => {
+    try {
+      const response = await axios.get(`${baseURL}/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error getting skin type by ID:', error);
+      throw error;
+    }
   },
 
   // Delete a skin type by ID
   delete: (id) => {
     return axios.delete(`${baseURL}/${id}`, httpOptions);
+  },
+
+  handleError(error) {
+    if (error.response) {
+      // Server errors
+      console.error('Error response:', error.response);
+      throw error.response.data;
+    } else if (error.request) {
+      // Network errors
+      console.error('Error request:', error.request);
+      throw new Error('Network error');
+    } else {
+      // Other errors
+      console.error('Error:', error.message);
+      throw new Error('Unexpected error');
+    }
   }
 };
 
