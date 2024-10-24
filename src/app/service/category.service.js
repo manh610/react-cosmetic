@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_URL = `${process.env.REACT_APP_BASE_URL}${process.env.REACT_APP_BASE_PATH}/category`;
+import { config } from '../config/config'
+
+const API_URL = `${config.REACT_APP_BASE_URL}/category`;
 
 const CategoryService = {
   //#region CRUD

@@ -7,11 +7,11 @@ import { PlusOutlined, ReloadOutlined, EditOutlined, DeleteOutlined } from '@ant
 import './admin_product_wrapper.css';
 import { useNavigate } from 'react-router-dom';
 
-import brandService from '../../service/brand.service';
+import discountService from '../../service/discount.service';
 
 import { toast, ToastContainer } from 'react-toastify';
 
-export default function BrandManagement()
+export default function DiscountManagement()
 {
 
     const useStyle = createStyles(({ css, token }) => {
@@ -50,12 +50,16 @@ export default function BrandManagement()
             dataIndex: 'name',
         },
         {
-            title: 'Quốc gia',
-            dataIndex: 'country',
+            title: 'Thời gian bắt đầu',
+            dataIndex: 'startDate',
         },
         {
-            title: 'Slogan',
-            dataIndex: 'slogan',
+            title: 'Thời gian kết thúc',
+            dataIndex: 'endDate',
+        },
+        {
+            title: 'Loại mã',
+            dataIndex: 'discountType',
         },
         {
             title: '',
@@ -67,7 +71,7 @@ export default function BrandManagement()
 
     const onClickEdit = (item) => {
         console.log(item);
-        navigate(`/admin/brand/${item.id}/edit`);
+        navigate(`/admin/discount/${item.id}/edit`);
     }
 
     const processData = (data) => {
@@ -83,12 +87,12 @@ export default function BrandManagement()
     }
 
     useEffect(()=>{
-        searchBrand();
+        // searchDiscount();
     }, [])
 
-    const searchBrand = async () => {
+    const searchDiscount = async () => {
         try {
-            const response = await brandService.search({});
+            const response = await discountService.search({});
             if (response.status) {
                 processData(response.data);
             }
@@ -112,11 +116,10 @@ export default function BrandManagement()
                 pauseOnHover
             />
             <div className='admin-title'>
-                QUẢN LÝ THƯƠNG HIỆU SẢN PHẨM 
+                QUẢN LÝ MÃ GIẢM GIÁ
             </div>
             <Row className='mg-bt-15'>
-                <Button onClick={() => navigate("/admin/brand/0/add")} className='btn-admin-add' type='primary' icon={<PlusOutlined />}>Thêm mới</Button>
-                <Button icon={<ReloadOutlined />}>Tải lại</Button>
+                <Button onClick={() => navigate("/admin/discount/0/add")} className='btn-admin-add' type='primary' icon={<PlusOutlined />}>Thêm mới</Button>
             </Row>
             <Table 
                 className={styles.customTable}

@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { format } from 'date-fns';
-import brandService from '../../service/brand.service';
+import skinTypeService from '../../service/skinType.service';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { Button, Input, Row, Col, Upload, Checkbox } from 'antd';
+import { Button, Input, Row, Col, Upload, Checkbox, Tooltip, Select, DatePicker } from 'antd';
 
-import { ArrowLeftOutlined, CheckOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, CheckOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import ImgCrop from 'antd-img-crop';
 
 const { TextArea } = Input;
 
-const BrandItem = () => {
+const SkinTypeItem = () => {
     // toast.configure()
     const { id, type } = useParams();
     const navigate = useNavigate();
@@ -37,11 +37,11 @@ const BrandItem = () => {
         setDes(data.description);
     }
 
-    const initBrand = async () => {
+    const initSkinType = async () => {
         if ( type == 'add' )
             return;
         try {
-            const response = await brandService.getById(id);
+            const response = await skinTypeService.getById(id);
             if (response.status) {
                 processData(response.data);
             }
@@ -51,37 +51,33 @@ const BrandItem = () => {
     };
 
     
-    useEffect(() => {
-        initBrand();
-    }, []);
+    // useEffect(() => {
+    //     initSkinType();
+    // }, []);
 
     const save = async (data) => {
         try {
             if (type === 'add') {
-                const response = await brandService.create(data);
+                const response = await skinTypeService.create(data);
                 if (response.status) {
-                    toast.success(`Thêm mới thương hiệu ${response.data.name} thành công`);
-                    navigate('/admin/brand');
+                    toast.success(`Thêm mới loại da ${response.data.name} thành công`);
+                    navigate('/admin/skin-type');
                 } else {
-                    toast.error('Thêm mới thương hiệu thất bại', 'FAIL');
+                    toast.error('Thêm mới loại da thất bại', 'FAIL');
                 }
             } else {
-                const response = await brandService.update(id, data);
+                const response = await skinTypeService.update(id, data);
                 if (response.status) {
-                    toast.success(`Cập nhật thương hiệu ${response.data.name} thành công`);
-                    navigate('/admin/brand');
+                    toast.success(`Cập nhật loại da ${response.data.name} thành công`);
+                    navigate('/admin/skin-type');
                 } else {
-                    toast.error('Cập nhật thương hiệu thất bại');
+                    toast.error('Cập nhật loại da thất bại');
                 }
             }
         } catch (error) {
             toast.error('Có lỗi xảy ra');
         }
     };
-
-    const onCheckMall = (e) => {
-        setMall(e.target.checked);
-    }
 
     const onSubmit = () => {
         var data = {
@@ -98,7 +94,7 @@ const BrandItem = () => {
     };
 
     const back = () => {
-        navigate("/admin/brand")
+        navigate("/admin/skin-type")
     };
 
     const [fileList, setFileList] = useState([]);
@@ -134,41 +130,15 @@ const BrandItem = () => {
                 pauseOnHover
             />
             <div className='admin-title'>
-                {type == 'add' ? 'THÊM MỚI THƯƠNG HIỆU SẢN PHẨM' : 'CẬP NHẬT THƯƠNG HIỆU SẢN PHẨM'}
+                {type == 'add' ? 'THÊM MỚI LOẠI DA' : 'CẬP NHẬT LOẠI DA'}
             </div>
-            <Row className='brand-account'>
-                <Col span={10}>
-                    <p className='field-label'>Ký hiệu <span className='require-icon'>*</span></p>
-                    <Input value={code} onChange={((e) => setCode(e.target.value))} placeholder='Nhập ký hiệu'></Input>
+            
+            <Row>
+                <p className='field-label'>Tên <span className='require-icon'>*</span></p>
+                <Input placeholder='Nhập tên'></Input>
 
-                    <p className='field-label'>Quốc gia</p>
-                    <Input value={country} onChange={((e) => setCountry(e.target.value))} placeholder='Nhập Quốc gia'></Input>
-
-                    <p className='field-label'>Mô tả</p>
-                    <TextArea value={description} onChange={((e) => setDes(e.target.value))} rows={3} placeholder='...'></TextArea>
-
-                    <Checkbox className='mg-t-15' checked={mall} onClick={onCheckMall}>Brand Mall</Checkbox>
-                </Col>
-                <Col span={2}></Col>
-                <Col span={10}>
-                    <p className='field-label'>Tên <span className='require-icon'>*</span></p>
-                    <Input value={name} onChange={((e) => setName(e.target.value))} placeholder='Nhập tên'></Input>
-
-                    <p className='field-label'>Slogan</p>
-                    <Input value={slogan} onChange={((e) => setSlogan(e.target.value))} placeholder="Nhập slogan"></Input>
-
-                    <ImgCrop rotationSlider className='upload-img'>
-                        <Upload
-                            action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-                            listType="picture-card"
-                            fileList={fileList}
-                            onChange={onChange}
-                            onPreview={onPreview}
-                        >
-                            {fileList.length < 1 && '+ Upload'}
-                        </Upload>
-                    </ImgCrop>
-                </Col>
+                <p className='field-label'>Mô tả</p>
+                <TextArea rows={3} placeholder='...'></TextArea>
             </Row>
             
             <Row className='admin-btn-container'>
@@ -179,4 +149,4 @@ const BrandItem = () => {
     );
 };
 
-export default BrandItem;
+export default SkinTypeItem;

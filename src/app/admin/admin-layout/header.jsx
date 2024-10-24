@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './header.css';
 
-import { Row } from 'antd';
+import { Row, Col } from 'antd';
 import { BellOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 
 export default function Header() {
@@ -42,14 +42,19 @@ export default function Header() {
   return (
     <div className='header'>
         <Row className='content'>
-            <div className='noti'>
-                <BellOutlined />
-                <span>Thông báo</span>
-            </div>
-            <div>
-                <QuestionCircleOutlined />
-                <span>Hỗ trợ</span>
-            </div>
+            <Col span={5}></Col>
+            <Col span={18}>
+                <Row className='fl-right'>
+                    <div className='noti'>
+                        <BellOutlined />
+                        <span>Thông báo</span>
+                    </div>
+                    <div>
+                        <QuestionCircleOutlined />
+                        <span>Hỗ trợ</span>
+                    </div>
+                </Row>
+            </Col>
         </Row>
     </div>
   );

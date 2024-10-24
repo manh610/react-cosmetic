@@ -127,7 +127,7 @@ export default function UserManagement()
             <div className='admin-title'>
                 QUẢN LÝ NGƯỜI DÙNG
             </div>
-            <Row>
+            <Row className='mg-bt-15'>
                 <Button onClick={() => navigate("/admin/user/0/add")} className='btn-add-user' type='primary' icon={<PlusOutlined />}>Thêm mới</Button>
                 <Button icon={<ReloadOutlined />}>Tải lại</Button>
             </Row>

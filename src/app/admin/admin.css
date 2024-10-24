@@ -38,3 +38,21 @@
 .mg-t-15 {
     margin-top: 15px;
 }
+
+.mg-t-20 {
+    margin-top: 20px
+}
+
+.ant-input-prefix{
+    margin-right: 20px;
+    background-color: #eeeeee;
+    padding: 0 10px;
+}
+
+.mg-bt-20{
+    margin-bottom: 20px;
+}
+
+.mg-bt-15{
+    margin-bottom: 15px;
+}

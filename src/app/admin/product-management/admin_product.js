@@ -7,11 +7,11 @@ import { PlusOutlined, ReloadOutlined, EditOutlined, DeleteOutlined } from '@ant
 import './admin_product_wrapper.css';
 import { useNavigate } from 'react-router-dom';
 
-import brandService from '../../service/brand.service';
+import productService from '../../service/product.service';
 
 import { toast, ToastContainer } from 'react-toastify';
 
-export default function BrandManagement()
+export default function ProductManagement()
 {
 
     const useStyle = createStyles(({ css, token }) => {
@@ -50,12 +50,20 @@ export default function BrandManagement()
             dataIndex: 'name',
         },
         {
-            title: 'Quốc gia',
-            dataIndex: 'country',
+            title: 'Danh mục',
+            dataIndex: 'categoryName',
         },
         {
-            title: 'Slogan',
-            dataIndex: 'slogan',
+            title: 'Thương hiệu',
+            dataIndex: 'brandName',
+        },
+        {
+            title: 'Trạng thái',
+            dataIndex: 'status',
+        },
+        {
+            title: 'Xuất xứ',
+            dataIndex: 'madeIn',
         },
         {
             title: '',
@@ -67,7 +75,7 @@ export default function BrandManagement()
 
     const onClickEdit = (item) => {
         console.log(item);
-        navigate(`/admin/brand/${item.id}/edit`);
+        navigate(`/admin/product/${item.id}/edit`);
     }
 
     const processData = (data) => {
@@ -76,6 +84,7 @@ export default function BrandManagement()
         for ( var i = 0; i < temp.length; i++ ){
             temp[i]['stt'] = count++;
             // temp[i]['fullName'] = temp[i].givenName + ' ' + temp[i].familyName;
+            temp[i].status = temp[i].status == 'STOCK' ? 'Còn hàng':'Hết hàng';
             temp[i].edit = <Tooltip title='Sửa'><EditOutlined onClick={onClickEdit.bind(null, temp[i])} /></Tooltip>
             temp[i].delete = <Tooltip title='Xóa'><DeleteOutlined /></Tooltip>
         }
@@ -83,12 +92,12 @@ export default function BrandManagement()
     }
 
     useEffect(()=>{
-        searchBrand();
+        // searchProduct();
     }, [])
 
-    const searchBrand = async () => {
+    const searchProduct = async () => {
         try {
-            const response = await brandService.search({});
+            const response = await productService.search({});
             if (response.status) {
                 processData(response.data);
             }
@@ -112,10 +121,10 @@ export default function BrandManagement()
                 pauseOnHover
             />
             <div className='admin-title'>
-                QUẢN LÝ THƯƠNG HIỆU SẢN PHẨM 
+                QUẢN LÝ SẢN PHẨM 
             </div>
             <Row className='mg-bt-15'>
-                <Button onClick={() => navigate("/admin/brand/0/add")} className='btn-admin-add' type='primary' icon={<PlusOutlined />}>Thêm mới</Button>
+                <Button onClick={() => navigate("/admin/product/0/add")} className='btn-admin-add' type='primary' icon={<PlusOutlined />}>Thêm mới</Button>
                 <Button icon={<ReloadOutlined />}>Tải lại</Button>
             </Row>
             <Table 
