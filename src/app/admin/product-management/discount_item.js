@@ -27,6 +27,7 @@ const DiscountItem = () => {
     const [country, setCountry] = useState('');
     const [mall, setMall] = useState(false);
     const [description, setDes] = useState('');
+    const [image, setImage] = useState('');
 
     const processData = (data) => {
         setCode(data.code);
@@ -35,6 +36,14 @@ const DiscountItem = () => {
         setCountry(data.country);
         setMall(data.mall);
         setDes(data.description);
+        if (data.image != '' && data.image != null) {
+            setFileList([{
+                uid: '-1',
+                name: 'image.png',
+                status: 'done',
+                url: 'data:image/jpeg;base64,'+data.image
+            }])
+        }
     }
 
     const initDiscount = async () => {
@@ -51,9 +60,9 @@ const DiscountItem = () => {
     };
 
     
-    // useEffect(() => {
-    //     initDiscount();
-    // }, []);
+    useEffect(() => {
+        initDiscount();
+    }, []);
 
     const save = async (data) => {
         try {
@@ -61,7 +70,9 @@ const DiscountItem = () => {
                 const response = await discountService.create(data);
                 if (response.status) {
                     toast.success(`Thêm mới mã giảm giá ${response.data.name} thành công`);
-                    navigate('/admin/discount');
+                    setTimeout(() => {
+                        navigate('/admin/discount');
+                    }, 1500);
                 } else {
                     toast.error('Thêm mới mã giảm giá thất bại', 'FAIL');
                 }
@@ -69,7 +80,9 @@ const DiscountItem = () => {
                 const response = await discountService.update(id, data);
                 if (response.status) {
                     toast.success(`Cập nhật mã giảm giá ${response.data.name} thành công`);
-                    navigate('/admin/discount');
+                    setTimeout(() => {
+                        navigate('/admin/discount');
+                    }, 1500);
                 } else {
                     toast.error('Cập nhật mã giảm giá thất bại');
                 }
@@ -116,6 +129,18 @@ const DiscountItem = () => {
         imgWindow?.document.write(image.outerHTML);
     };
 
+    const customRequest = ({ file, onSuccess }) => {
+        setTimeout(() => {
+            onSuccess('ok');
+          }, 1000);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const [, base64Image] = e.target.result.split(',');
+          setImage(base64Image);
+        };
+        reader.readAsDataURL(file);
+    };
+
     return (
         <div>
             <ToastContainer 
@@ -151,6 +176,8 @@ const DiscountItem = () => {
                             { value: 'PROMOTION', 'label': 'Quảng cáo'}
                         ]}
                         placeholder='Chọn loại mã giảm giá'
+                        // value={discountType}
+                        // onChange={}
                     />
 
                     <p className='field-label'>Mô tả</p>
@@ -169,7 +196,7 @@ const DiscountItem = () => {
                     
                     <ImgCrop rotationSlider className='upload-img mg-t-20'>
                         <Upload
-                            action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+                            customRequest={customRequest}
                             listType="picture-card"
                             fileList={fileList}
                             onChange={onChange}

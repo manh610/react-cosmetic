@@ -12,27 +12,53 @@ const httpOptions = {
 
 const DiscountService = {
   // Search discounts
-  search: (data) => {
+  search: async (data) => {
     const params = new URLSearchParams();
-    Object.keys(data).forEach(key => {
+    Object.keys(data).forEach((key) => {
       params.append(key, data[key]);
     });
-    return axios.get(`${baseURL}`, { ...httpOptions, params });
+
+    try {
+      const response = await axios.get(baseURL, { params });
+      return response.data;
+    } catch (error) {
+      console.error('Error searching brands:', error);
+      throw error;
+    }
   },
 
-  // Create a new discount
-  create: (data) => {
-    return axios.post(`${baseURL}`, data, httpOptions);
+  create: async (data) => {
+    try {
+      const response = await axios.post(baseURL, data, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error creating brand:', error);
+      throw error;
+    }
   },
 
-  // Update an existing discount by ID
-  update: (id, data) => {
-    return axios.put(`${baseURL}/${id}`, data, httpOptions);
+  update: async (id, data) => {
+    try {
+      const response = await axios.put(`${baseURL}/${id}`, data, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error updating brand:', error);
+      throw error;
+    }
   },
 
-  // Get discount details by ID
-  detail: (id) => {
-    return axios.get(`${baseURL}/${id}`, httpOptions);
+  getById: async (id) => {
+    try {
+      const response = await axios.get(`${baseURL}/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error getting brand by ID:', error);
+      throw error;
+    }
   },
 
   // Delete a discount by ID

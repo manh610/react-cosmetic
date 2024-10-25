@@ -79,7 +79,6 @@ export default function DiscountManagement()
         var count = 1;
         for ( var i = 0; i < temp.length; i++ ){
             temp[i]['stt'] = count++;
-            // temp[i]['fullName'] = temp[i].givenName + ' ' + temp[i].familyName;
             temp[i].edit = <Tooltip title='Sửa'><EditOutlined onClick={onClickEdit.bind(null, temp[i])} /></Tooltip>
             temp[i].delete = <Tooltip title='Xóa'><DeleteOutlined /></Tooltip>
         }
@@ -87,7 +86,7 @@ export default function DiscountManagement()
     }
 
     useEffect(()=>{
-        // searchDiscount();
+        searchDiscount();
     }, [])
 
     const searchDiscount = async () => {
