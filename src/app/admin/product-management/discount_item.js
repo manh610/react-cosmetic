@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
-import { format } from 'date-fns';
+import { parse, format } from 'date-fns';
 import discountService from '../../service/discount.service';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import dayjs from 'dayjs';
 
 import { Button, Input, Row, Col, Upload, Checkbox, Tooltip, Select, DatePicker } from 'antd';
 
 import { ArrowLeftOutlined, CheckOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import ImgCrop from 'antd-img-crop';
+
 
 const { TextArea } = Input;
 
@@ -23,19 +26,19 @@ const DiscountItem = () => {
 
     const [code, setCode] = useState('');
     const [name, setName] = useState('');
-    const [slogan, setSlogan] = useState('');
-    const [country, setCountry] = useState('');
-    const [mall, setMall] = useState(false);
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [discountType, setDiscountType] = useState(false);
     const [description, setDes] = useState('');
     const [image, setImage] = useState('');
 
     const processData = (data) => {
         setCode(data.code);
         setName(data.name);
-        setSlogan(data.slogan);
-        setCountry(data.country);
-        setMall(data.mall);
         setDes(data.description);
+        setStartDate(data.startDate);
+        setDiscountType(data.discountType);
+        setEndDate(data.endDate);
         if (data.image != '' && data.image != null) {
             setFileList([{
                 uid: '-1',
@@ -44,6 +47,21 @@ const DiscountItem = () => {
                 url: 'data:image/jpeg;base64,'+data.image
             }])
         }
+    }
+
+    const handleTime = (time) => {
+        const parseDate = parse(time, 'dd-MM-yyyy', new Date());
+
+        const formatedDate = format(parseDate, "yyyy-MM-dd'T'HH:mm:ss");
+        return formatedDate;
+    }
+
+    const convertTime = (time) => {
+        const parseDate = parse(time, "yyyy-MM-dd'T'HH:mm:ss", new Date());
+
+        const formatedDate = format(parseDate, "dd-MM-yyyy");
+        console.log(formatedDate);
+        return formatedDate;
     }
 
     const initDiscount = async () => {
@@ -96,12 +114,11 @@ const DiscountItem = () => {
         var data = {
             code: code,
             name: name,
-            logo: null,
-            country: country,
-            mall: mall,
-            slogan: slogan,
+            image: fileList.length > 0 ? image : '',
+            discountType: discountType,
+            startDate: handleTime(startDate),
+            endDate: handleTime(endDate),
             description: description,
-            status: 'ACTIVE'
         }
         save(data);
     };
@@ -141,6 +158,18 @@ const DiscountItem = () => {
         reader.readAsDataURL(file);
     };
 
+    const onChangeStartDate = (_, dateStr) => {
+        setStartDate(dateStr);
+    }
+
+    const onChangeEndDate = (_, dateStr) => {
+        setEndDate(dateStr);
+    }
+
+    const onSelectDiscountType = (val) => {
+        setDiscountType(val);
+    }
+
     return (
         <div>
             <ToastContainer 
@@ -164,8 +193,10 @@ const DiscountItem = () => {
 
                     <p className='field-label'>Thời gian bắt đầu</p>
                     <DatePicker 
+                        format={"DD-MM-YYYY"}
                         placeholder='Chọn thời gian bắt đầu'
                         style={{ width: '100%' }}
+                        onChange={onChangeStartDate}
                     />
 
                     <p className='field-label'>Loại mã <span className='require-icon'>*</span></p>
@@ -176,12 +207,12 @@ const DiscountItem = () => {
                             { value: 'PROMOTION', 'label': 'Quảng cáo'}
                         ]}
                         placeholder='Chọn loại mã giảm giá'
-                        // value={discountType}
-                        // onChange={}
+                        value={discountType}
+                        onChange={onSelectDiscountType}
                     />
 
                     <p className='field-label'>Mô tả</p>
-                    <TextArea rows={2} placeholder='...'/>
+                    <TextArea value={description} onChange={(e) => setDes(e.target.value)} rows={2} placeholder='...'/>
                 </Col>
                 <Col span={2}></Col>
                 <Col span={10}>
@@ -190,8 +221,11 @@ const DiscountItem = () => {
                     
                     <p className='field-label'>Thời gian kết thúc</p>
                     <DatePicker 
+                        format={"DD-MM-YYYY"}
                         placeholder='Chọn thời gian kết thúc'
                         style={{ width: '100%' }}
+                        onChange={onChangeEndDate}
+                        // defaultValue={endDate!='' ? dayjs(convertTime(endDate), 'DD-MM-YYYY') : ''}
                     />
                     
                     <ImgCrop rotationSlider className='upload-img mg-t-20'>
