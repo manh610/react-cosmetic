@@ -1,13 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter } from 'react-router-dom';
-import AllRoutes from './app/AllRoutes';
+import AllRoutes from './Pages/AllRoutes';
 
 function App() {
   return (
-    <BrowserRouter className="App">
       <AllRoutes />
-    </BrowserRouter>
   );
 }
 
