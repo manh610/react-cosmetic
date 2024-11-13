@@ -763,81 +763,13 @@ export default function RightSide() {
           >
             Login/Sign Up Using Phone
           </h6>
+          
         </div>
       </div>
 
       <div>
-        <InputGroup className="mb-3" style={{ width: "353px", height: "56px" }}>
-          <InputGroup.Text
-            id="basic-addon1"
-            style={{ backgroundColor: "#fff" }}
-          >
-            +91
-          </InputGroup.Text>
-          <Form.Control
-            placeholder="Enter Mobile Number"
-            aria-label="+91"
-            type="number"
-            aria-describedby="basic-addon1"
-            value={mnumber}
-            className="inputnumber_otp"
-            onChange={(e) => setNumber(e.target.value)}
-          />
-        </InputGroup>
-        <Form.Text id="passwordHelpBlock" muted></Form.Text>
+        
       </div>
-
-      <div>
-        <p
-          style={{
-            width: "715px",
-            height: "75px",
-            color: "#757575",
-            fontSize: "14px",
-          }}
-        >
-          Registering for this site allows you to access your order status and
-          history. Just fill in the above fields, and we'll get a new account
-          set up for you in no time. We will only ask you for information
-          necessary to make the purchase process faster and easier.
-        </p>
-      </div>
-      {mnumber.length !== 10 ? (
-        <div>
-          <button
-            disabled={true}
-            style={{
-              padding: "10px 25px",
-              fontSize: "14px",
-              borderRadius: "10px",
-              backgroundColor: "lightgray",
-              color: "gray",
-              border: "none",
-            }}
-          >
-            SEND ME OTP
-          </button>
-        </div>
-      ) : (
-        <div>
-          <button
-            onClick={requestotp}
-            style={{
-              padding: "10px 25px",
-              fontSize: "14px",
-              borderRadius: "10px",
-              backgroundColor: "#000",
-              color: "#fff",
-            }}
-          >
-           {loading ? (
-                 <Spinner animation="border" variant="light" size="sm" />
-              ) : (
-                "SEND ME OTP"
-              )}
-          </button>
-        </div>
-      )}
 
       <div style={{ color: "lightgray" }}>
         ___________________________________________________________________________________________________
@@ -851,33 +783,6 @@ export default function RightSide() {
           justifyContent: "center",
         }}
       >
-        <div>
-          <input
-            style={{
-              color: "#fff",
-              backgroundColor: "#000",
-              accentColor: "#000",
-            }}
-            checked={cheked}
-            onChange={() => {
-              cheked == true ? setchecked(false) : setchecked(true);
-            }}
-            type="checkbox"
-          />
-        </div>
-
-        <div>
-          <p
-            style={{
-              fontSize: "13px",
-              paddingTop: "15px",
-              paddingLeft: "10px",
-              color: "#757575",
-            }}
-          >
-            Get important updates on Whatsapp Terms and Conditions
-          </p>
-        </div>
       </div>
 
       <div style={{ color: "lightgray" }}>
